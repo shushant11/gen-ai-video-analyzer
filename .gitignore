@@ -1,1 +1,17 @@
+# Downloaded audio/video files
+downloades/
+
+# Environment
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Secrets
 .env
+
+# IDE
+.vscode/
