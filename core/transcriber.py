@@ -11,7 +11,6 @@ SARVAM_PIECE_SECONDS = 25
 WHISPER_MODEL = os.getenv("WHISPER_MODEL", "small")
 
 
-SARVAM_API_KEY = os.getenv("SARVAM_API_KEY")
 SARVAM_STT_TRANSLATE_URL = "https://api.sarvam.ai/speech-to-text-translate"
 SARVAM_MODEL = os.getenv("SARVAM_STT_MODEL", "saaras:v2.5")
 
@@ -39,7 +38,7 @@ def transcribe_chunk_whisper(chunk_path: str) -> str:
 
 def _send_to_sarvam(piece_path: str) -> str:
     """Send one ≤30s WAV file to Sarvam and return the English transcript."""
-    headers = {"api-subscription-key": SARVAM_API_KEY}
+    headers = {"api-subscription-key": os.getenv("SARVAM_API_KEY")}
 
     with open(piece_path, "rb") as f:
         files = {"file": (os.path.basename(piece_path), f, "audio/wav")}
@@ -65,7 +64,7 @@ def transcribe_chunk_sarvam(chunk_path: str) -> str:
     Sarvam sync API only accepts ≤30s audio. We split this chunk into
     25-second pieces, send each separately, and join the transcripts.
     """
-    if not SARVAM_API_KEY:
+    if not os.getenv("SARVAM_API_KEY"):
         raise RuntimeError("SARVAM_API_KEY is not set in environment / .env")
 
     audio = AudioSegment.from_wav(chunk_path)

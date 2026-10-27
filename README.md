@@ -121,25 +121,20 @@ source venv/bin/activate
 
 ```bash
 pip install -r Requirements.txt
-pip install langchain-chroma langchain-text-splitters
 ```
-
-> `langchain-chroma` is imported by `core/vector_store.py` but is not yet listed in `Requirements.txt`, so install it separately (or add it to the file).
 
 ### 5. Configure FFmpeg
 
-`utils/audio_processor.py` currently points to a hard-coded Windows FFmpeg path:
+If FFmpeg is on your system `PATH` (check with `ffmpeg -version`), nothing else is needed.
+Otherwise add its full path to `.env`:
 
-```python
-AudioSegment.converter = r"C:\Users\...\ffmpeg.exe"
-"ffmpeg_location": r"C:\Users\...\bin",
+```env
+FFMPEG_PATH=C:\\ffmpeg\\bin\\ffmpeg.exe
 ```
-
-Update both lines to match where FFmpeg is installed on your machine. If FFmpeg is already on your system `PATH`, you can remove them.
 
 ### 6. Set up environment variables
 
-Create a `.env` file in the project root:
+Copy `.env.example` to `.env` in the project root and fill in your keys:
 
 ```env
 MISTRAL_API_KEY=your_mistral_api_key
