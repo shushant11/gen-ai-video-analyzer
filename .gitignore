@@ -15,9 +15,3 @@ __pycache__/
 
 # IDE
 .vscode/
-
-# Generated data
-vector_db/
-downloads/
-*_converted.wav
-*_chunk_*.wav

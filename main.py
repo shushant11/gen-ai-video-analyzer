@@ -1,6 +1,4 @@
 from dotenv import load_dotenv
-load_dotenv()  # must run before core/ and utils/ imports read env vars
-
 from utils.audio_processor import process_input
 from core.transcriber import transcribe_all
 from core.summarizer import summarize, generate_title
@@ -8,6 +6,7 @@ from core.extractor import extract_action_items, extract_key_decisions, extract_
 from core.rag_engine import build_rag_chain, ask_question
 
 
+load_dotenv()
 
 def run_pipeline(source :str, language :str = "english") -> dict:
     print("starting AI Video Assistant")
