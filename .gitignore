@@ -1,5 +1,11 @@
-# Downloaded audio/video files
+# Downloaded audio/video files (downloades/ is the old, misspelt folder name)
+downloads/
 downloades/
+*_converted.wav
+*_chunk_*.wav
+
+# Local vector database (rebuilt for every analysed video)
+vector_db/
 
 # Environment
 .venv/

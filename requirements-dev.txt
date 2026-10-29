@@ -1,0 +1,6 @@
+# Only what the unit tests need (they do not load Whisper, Chroma or any API)
+pytest>=8.0
+langchain-core>=0.2.0
+langchain-text-splitters>=0.2.0
+langchain-google-genai>=1.0.0
+python-dotenv>=1.0.0

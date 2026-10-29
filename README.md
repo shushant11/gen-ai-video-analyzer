@@ -2,169 +2,157 @@
 
 **Transcribe · Summarise · Chat with your meetings and videos**
 
-Gen-AI Video Analyzer turns any YouTube video or local audio/video file into structured meeting intelligence. It transcribes the audio, generates a title and summary, pulls out action items, key decisions and open questions, and then lets you **chat with the content** through a Retrieval-Augmented Generation (RAG) pipeline.
+![CI](https://github.com/shushant11/gen-ai-video-analyzer/actions/workflows/ci.yml/badge.svg)
 
-It supports both **English** (via local OpenAI Whisper) and **Hinglish / Hindi** (via Sarvam AI speech-to-text-translate) audio.
+Gen-AI Video Analyzer turns a YouTube video or a local audio/video file into structured meeting notes. It transcribes the audio, writes a title and summary, extracts action items, key decisions and open questions, and then lets you **chat with the content** through a Retrieval-Augmented Generation (RAG) pipeline.
+
+It supports **English** audio (local OpenAI Whisper) and **Hinglish / Hindi** audio (Sarvam AI speech-to-text-translate, which returns English text).
 
 ---
 
 ## ✨ Features
 
-- **Flexible input** – paste a YouTube URL or a path to a local audio/video file (`.mp4`, `.mp3`, `.wav`, `.m4a`, etc.)
-- **Dual transcription engines**
-  - `english` → OpenAI Whisper, running locally
+- **Flexible input**: a YouTube URL or a path to a local file (`.mp4`, `.mp3`, `.wav`, `.m4a`, ...)
+- **Two transcription engines**
+  - `english` → OpenAI Whisper, running locally (model size set with `WHISPER_MODEL`, default `small`)
   - `hinglish` → Sarvam AI (`saaras:v2.5`), which transcribes and translates to English in one step
-- **Automatic title** – a short professional title (max 8 words)
-- **Map-reduce summarisation** – long transcripts are split, summarised chunk by chunk, then merged into one bullet-point summary
-- **Smart extraction**
-  - ✅ Action items with owner and deadline
-  - 🔑 Key decisions
-  - ❓ Open questions / follow-ups
-- **RAG chat** – ask questions about the video; answers come only from the transcript
-- **Two interfaces** – a styled Streamlit web app and an interactive command-line mode
+- **Title and summary**: a title of at most 8 words, and a bullet-point summary. Short transcripts are summarised in one call; long ones use map-reduce (summarise parts, then merge)
+- **Structured extraction**: action items (with owner and deadline), key decisions and open questions, parsed from a single LLM call
+- **RAG chat**: ask questions about the video; the prompt restricts answers to the retrieved transcript and tells the model to say so when the answer is not there
+- **Two interfaces**: a Streamlit web app and an interactive command-line mode
 
 ---
 
-## 🧠 How It Works
+## 🧠 How it works
 
 ```
- YouTube URL / Local File
+ YouTube URL / local file
             │
             ▼
- ┌────────────────────────┐
- │  Audio Processing      │  yt-dlp download → WAV (16 kHz mono) → 10-min chunks
- └────────────────────────┘
+ ┌──────────────────────────┐
+ │ Audio processing         │  yt-dlp download or pydub conversion → WAV → 10-minute chunks
+ └──────────────────────────┘
             │
             ▼
- ┌────────────────────────┐
- │  Transcription         │  Whisper (English)  |  Sarvam AI (Hinglish → English)
- └────────────────────────┘
+ ┌──────────────────────────┐
+ │ Transcription            │  Whisper (English)  |  Sarvam AI (Hinglish → English, 25 s pieces)
+ └──────────────────────────┘
             │
             ▼
- ┌────────────────────────┐
- │  LLM Analysis          │  Mistral (mistral-small-latest) via LangChain LCEL
- │                        │  → Title · Summary · Action Items · Decisions · Questions
- └────────────────────────┘
+ ┌──────────────────────────┐
+ │ LLM analysis             │  Google Gemini via LangChain (LCEL)
+ │                          │  → title · summary · action items · decisions · open questions
+ └──────────────────────────┘
             │
             ▼
- ┌────────────────────────┐
- │  RAG Engine            │  500-char chunks → all-MiniLM-L6-v2 embeddings → ChromaDB
- │                        │  → top-4 retrieval → Mistral answers your questions
- └────────────────────────┘
+ ┌──────────────────────────┐
+ │ RAG engine               │  1,000-character chunks (150 overlap) → all-MiniLM-L6-v2
+ │                          │  embeddings → ChromaDB → top-6 retrieval → Gemini answers
+ └──────────────────────────┘
 ```
+
+### Design notes
+
+| Concern | What the code does |
+|---|---|
+| Sarvam's 30-second API limit | Each 10-minute chunk is cut into 25-second pieces, transcribed separately and joined (`SARVAM_PIECE_SECONDS`) |
+| Long transcripts | Summary: one call up to 20,000 characters, otherwise 8,000-character parts (200 overlap) are summarised and merged. Extraction: one combined call up to 20,000 characters, otherwise split into parts and merged |
+| Fewer LLM calls | Action items, decisions and questions come from one prompt; any section missing from the answer is extracted separately |
+| Rate limits | `core/llm.py` retries Gemini up to 6 times with exponential backoff and jitter (10 s to 60 s) |
+| One video at a time | Every analysis **replaces** the stored transcript in `vector_db/`, so chat answers never mix videos |
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Tech stack
 
 | Layer | Tools |
 |---|---|
 | Audio acquisition | `yt-dlp`, `pydub`, FFmpeg |
 | Speech-to-text | OpenAI Whisper (local), Sarvam AI API |
-| LLM | Mistral AI (`mistral-small-latest`) |
+| LLM | Google Gemini (default `gemini-3.5-flash-lite`) |
 | Orchestration | LangChain (LCEL) |
-| Embeddings | HuggingFace `sentence-transformers/all-MiniLM-L6-v2` |
+| Embeddings | `sentence-transformers/all-MiniLM-L6-v2` |
 | Vector store | ChromaDB |
 | UI | Streamlit |
+| Tests / CI | pytest, GitHub Actions |
 
 ---
 
-## 📁 Project Structure
+## 📁 Project structure
 
 ```
 gen-ai-video-analyzer/
 ├── app.py                  # Streamlit web interface
 ├── main.py                 # CLI entry point + run_pipeline()
-├── test.py                 # Quick end-to-end test script
-├── Requirements.txt        # Python dependencies
+├── test.py                 # Manual end-to-end script (needs API keys)
+├── Requirements.txt        # Runtime dependencies
+├── requirements-dev.txt    # What the unit tests need
 ├── core/
+│   ├── llm.py              # Gemini client with retry
 │   ├── transcriber.py      # Whisper + Sarvam AI transcription
-│   ├── summarizer.py       # Map-reduce summary + title generation
+│   ├── summarizer.py       # Title + map-reduce summary
 │   ├── extractor.py        # Action items, decisions, open questions
-│   ├── vector_store.py     # ChromaDB + HuggingFace embeddings
+│   ├── vector_store.py     # ChromaDB + MiniLM embeddings
 │   └── rag_engine.py       # RAG chain for Q&A
-└── utils/
-    └── audio_processor.py  # YouTube download, WAV conversion, chunking
+├── utils/
+│   └── audio_processor.py  # YouTube download, WAV conversion, chunking
+├── tests/                  # Unit tests (no API key, audio or model needed)
+└── .github/workflows/ci.yml
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Getting started
 
 ### 1. Prerequisites
 
 - **Python 3.10+**
-- **FFmpeg** installed on your system ([download](https://ffmpeg.org/download.html))
-- A **Mistral AI API key** ([console.mistral.ai](https://console.mistral.ai/))
-- A **Sarvam AI API key** (only needed for Hinglish) ([sarvam.ai](https://www.sarvam.ai/))
+- **FFmpeg** on your `PATH` ([download](https://ffmpeg.org/download.html)). If it is installed elsewhere, set `FFMPEG_PATH` in `.env`
+- A **Google Gemini API key** ([aistudio.google.com](https://aistudio.google.com/))
+- A **Sarvam AI API key**, only for Hinglish ([sarvam.ai](https://www.sarvam.ai/))
 
-### 2. Clone the repository
+### 2. Install
 
 ```bash
 git clone https://github.com/shushant11/gen-ai-video-analyzer.git
 cd gen-ai-video-analyzer
-```
 
-### 3. Create a virtual environment
-
-```bash
 python -m venv venv
+source venv/bin/activate        # Windows: venv\Scripts\activate
 
-# Windows
-venv\Scripts\activate
-
-# macOS / Linux
-source venv/bin/activate
-```
-
-### 4. Install dependencies
-
-```bash
 pip install -r Requirements.txt
-pip install langchain-chroma langchain-text-splitters
 ```
 
-> `langchain-chroma` is imported by `core/vector_store.py` but is not yet listed in `Requirements.txt`, so install it separately (or add it to the file).
+### 3. Configure
 
-### 5. Configure FFmpeg
-
-`utils/audio_processor.py` currently points to a hard-coded Windows FFmpeg path:
-
-```python
-AudioSegment.converter = r"C:\Users\...\ffmpeg.exe"
-"ffmpeg_location": r"C:\Users\...\bin",
-```
-
-Update both lines to match where FFmpeg is installed on your machine. If FFmpeg is already on your system `PATH`, you can remove them.
-
-### 6. Set up environment variables
-
-Create a `.env` file in the project root:
+Copy `.env.example` to `.env` and fill in your keys:
 
 ```env
-MISTRAL_API_KEY=your_mistral_api_key
-SARVAM_API_KEY=your_sarvam_api_key
+GOOGLE_API_KEY=your_gemini_key
+SARVAM_API_KEY=your_sarvam_key        # only for Hinglish
 
 # Optional
-WHISPER_MODEL=small            # tiny | base | small | medium | large
+GEMINI_MODEL=gemini-3.5-flash-lite
+WHISPER_MODEL=small                   # tiny | base | small | medium | large
 SARVAM_STT_MODEL=saaras:v2.5
+# FFMPEG_PATH=C:\tools\ffmpeg\bin\ffmpeg.exe
 ```
 
 ---
 
 ## 💻 Usage
 
-### Streamlit web app
+### Streamlit app
 
 ```bash
 streamlit run app.py
 ```
 
 1. Paste a YouTube URL or a local file path in the sidebar
-2. Choose the language: `english` or `hinglish`
+2. Choose `english` or `hinglish`
 3. Click **⚡ Analyse**
-4. Review the title, summary, transcript, action items, decisions and open questions
-5. Use **💬 Chat with your Meeting** to ask follow-up questions
+4. Read the title, summary, transcript, action items, decisions and open questions
+5. Ask questions in **💬 Chat with your Meeting**
 
 ### Command line
 
@@ -172,73 +160,51 @@ streamlit run app.py
 python main.py
 ```
 
-```
-Enter YouTube URL or local file path: https://www.youtube.com/watch?v=...
-Language (english/hinglish): english
-...
-💬 Chat with your meeting (type 'exit' to quit)
-You: What were the main decisions made?
-```
+### Manual end-to-end script
 
-### Quick test
-
-Edit the `source` and `language` values in `test.py`, then run:
-
-```bash
-python test.py
-```
+Edit `source` and `language` in `test.py`, then run `python test.py`.
 
 ---
 
-## ⚙️ Configuration Notes
+## ✅ Tests
 
-| Setting | Where | Default |
-|---|---|---|
-| Whisper model size | `WHISPER_MODEL` env var | `small` |
-| Audio chunk length | `chunk_audio()` in `utils/audio_processor.py` | 10 minutes |
-| Sarvam piece length | `SARVAM_PIECE_SECONDS` in `core/transcriber.py` | 25 seconds (API limit is 30 s) |
-| Summary chunk size | `split_transcript()` in `core/summarizer.py` | 3000 chars, 200 overlap |
-| RAG chunk size | `build_vector_store()` in `core/vector_store.py` | 500 chars, 50 overlap |
-| Retrieved chunks (k) | `build_rag_chain()` in `core/rag_engine.py` | 4 |
-| Vector DB location | `CHROMA_DIR` in `core/vector_store.py` | `vector_db/` |
+```bash
+pip install -r requirements-dev.txt
+pytest -q
+```
 
-Downloaded audio is saved to the `downloades/` folder (git-ignored).
+The unit tests replace the LLM with a fake, so they need no API key, audio file or model download. They cover the extraction parser (heading styles, missing-section fallback, long-transcript split and merge) and the summariser's single-call versus map-reduce behaviour. CI runs them on every push.
+
+Not covered yet: transcription, audio conversion and the RAG answers themselves. There is no quantitative evaluation (retrieval hit rate, answer accuracy, word error rate) yet.
+
+---
+
+## ⚠️ Limitations
+
+- Transcripts are sent to the Gemini API (and Hinglish audio to Sarvam), so don't use confidential recordings
+- One video is indexed at a time; a new analysis replaces the previous one
+- Temporary WAV chunks are not deleted after processing
+- Output quality depends on audio quality and the chosen Whisper model size
 
 ---
 
 ## 🗺️ Roadmap
 
-- [ ] Export results to PDF / TXT (`reportlab` and `fpdf2` are already in the requirements)
+- [ ] Measure retrieval hit rate and answer accuracy on a labelled question set
+- [ ] Report transcription speed and word error rate for Whisper versus Sarvam
+- [ ] Export results to PDF / TXT
 - [ ] Speaker diarization
-- [ ] Remove the hard-coded FFmpeg path (auto-detect or read from `.env`)
-- [ ] Per-video vector store collections so multiple videos don't mix
-- [ ] Docker support
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome. Fork the repo, create a feature branch, commit your changes and open a pull request.
-
-```bash
-git checkout -b feature/your-feature
-git commit -m "Add your feature"
-git push origin feature/your-feature
-```
+- [ ] Docker support and a hosted demo
+- [ ] Clean up temporary audio files
 
 ---
 
 ## 📄 License
 
-No license has been added yet. Consider adding one (for example MIT) so others know how they can use this project.
+No license has been added yet.
 
 ---
 
 ## 🙏 Acknowledgements
 
-- [OpenAI Whisper](https://github.com/openai/whisper)
-- [Sarvam AI](https://www.sarvam.ai/)
-- [Mistral AI](https://mistral.ai/)
-- [LangChain](https://www.langchain.com/)
-- [ChromaDB](https://www.trychroma.com/)
-- [Streamlit](https://streamlit.io/)
+[OpenAI Whisper](https://github.com/openai/whisper) · [Sarvam AI](https://www.sarvam.ai/) · [Google Gemini](https://ai.google.dev/) · [LangChain](https://www.langchain.com/) · [ChromaDB](https://www.trychroma.com/) · [Streamlit](https://streamlit.io/)

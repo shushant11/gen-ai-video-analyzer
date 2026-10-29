@@ -1,17 +1,24 @@
+import os
+import shutil
+
 import yt_dlp
 from pydub import AudioSegment
-import os
 
-AudioSegment.converter = r"C:\Users\singh\Downloads\ffmpeg-9.0.2-essentials_build\ffmpeg-9.0.2-essentials_build\bin\ffmpeg.exe"
-DOWNLOAD_DIR = 'downloades'
-os.makedirs(DOWNLOAD_DIR,exist_ok=True)
+# FFmpeg: by default it is found on PATH. To use a specific copy, set FFMPEG_PATH in .env
+# to the ffmpeg executable (for example C:\tools\ffmpeg\bin\ffmpeg.exe or /usr/local/bin/ffmpeg).
+FFMPEG_PATH = os.getenv("FFMPEG_PATH") or shutil.which("ffmpeg")
+if FFMPEG_PATH:
+    AudioSegment.converter = FFMPEG_PATH
+
+DOWNLOAD_DIR = "downloads"
+os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
 def download_youtube_audio(url : str)->str:
     output_path=os.path.join(DOWNLOAD_DIR,"%(title)s.%(ext)s")
     ydl_opts = {
         "format": "bestaudio/best",
         "outtmpl": output_path,
-        "ffmpeg_location": r"C:\Users\singh\Downloads\ffmpeg-9.0.2-essentials_build\ffmpeg-9.0.2-essentials_build\bin",
+        **({"ffmpeg_location": os.path.dirname(FFMPEG_PATH)} if FFMPEG_PATH else {}),
         "postprocessors":[
             {
                 "key": "FFmpegExtractAudio",
@@ -19,12 +26,12 @@ def download_youtube_audio(url : str)->str:
                 "preferredquality":"192",
             }
         ],
-        "quite":True,
+        "quiet": True,
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url,download=True)
-        filename=ydl.prepare_filename(info).replace(".webm",".wav").replace(".m4a",".wav")
-        return filename
+        # the FFmpegExtractAudio post-processor always leaves a .wav next to the downloaded file
+        return os.path.splitext(ydl.prepare_filename(info))[0] + ".wav"
 
 
 
