@@ -4,6 +4,11 @@
 
 ![CI](https://github.com/shushant11/gen-ai-video-analyzer/actions/workflows/ci.yml/badge.svg)
 
+<p align="center">
+  <img src="docs/app-summary.png" alt="Summary and transcript view" width="48%">
+  <img src="docs/app-chat.png" alt="Chat with the meeting" width="48%">
+</p>
+
 Gen-AI Video Analyzer turns a YouTube video or a local audio/video file into structured meeting notes. It transcribes the audio, writes a title and summary, extracts action items, key decisions and open questions, and then lets you **chat with the content** through a Retrieval-Augmented Generation (RAG) pipeline.
 
 It supports **English** audio (local OpenAI Whisper) and **Hinglish / Hindi** audio (Sarvam AI speech-to-text-translate, which returns English text).
@@ -25,30 +30,18 @@ It supports **English** audio (local OpenAI Whisper) and **Hinglish / Hindi** au
 
 ## 🧠 How it works
 
-```
- YouTube URL / local file
-            │
-            ▼
- ┌──────────────────────────┐
- │ Audio processing         │  yt-dlp download or pydub conversion → WAV → 10-minute chunks
- └──────────────────────────┘
-            │
-            ▼
- ┌──────────────────────────┐
- │ Transcription            │  Whisper (English)  |  Sarvam AI (Hinglish → English, 25 s pieces)
- └──────────────────────────┘
-            │
-            ▼
- ┌──────────────────────────┐
- │ LLM analysis             │  Google Gemini via LangChain (LCEL)
- │                          │  → title · summary · action items · decisions · open questions
- └──────────────────────────┘
-            │
-            ▼
- ┌──────────────────────────┐
- │ RAG engine               │  1,000-character chunks (150 overlap) → all-MiniLM-L6-v2
- │                          │  embeddings → ChromaDB → top-6 retrieval → Gemini answers
- └──────────────────────────┘
+```mermaid
+flowchart TD
+    A["YouTube URL or local audio/video file"] --> B["Audio processing<br/>yt-dlp or pydub, WAV, 10-minute chunks"]
+    B --> C{"Language"}
+    C -->|English| D["Whisper (local)"]
+    C -->|"Hinglish / Hindi"| E["Sarvam AI<br/>25-second pieces, returns English"]
+    D --> F["Transcript"]
+    E --> F
+    F --> G["Gemini via LangChain<br/>title, summary, action items,<br/>decisions, open questions"]
+    F --> H["RAG index<br/>1,000-char chunks, 150 overlap,<br/>all-MiniLM-L6-v2, ChromaDB"]
+    H --> I["Top-6 retrieval"]
+    I --> J["Gemini answers<br/>or: not found in transcript"]
 ```
 
 ### Design notes
@@ -175,7 +168,45 @@ pytest -q
 
 The unit tests replace the LLM with a fake, so they need no API key, audio file or model download. They cover the extraction parser (heading styles, missing-section fallback, long-transcript split and merge) and the summariser's single-call versus map-reduce behaviour. CI runs them on every push.
 
-Not covered yet: transcription, audio conversion and the RAG answers themselves. There is no quantitative evaluation (retrieval hit rate, answer accuracy, word error rate) yet.
+Not covered by the unit tests: transcription, audio conversion and live RAG answers. Retrieval and answer quality are measured separately in [Evaluation](#-evaluation); word error rate is not measured yet.
+
+---
+
+## 📏 Evaluation
+
+`eval/` holds a small, repeatable check of the RAG part, so settings are chosen from measurements.
+
+- **Corpus:** one 12,479-character transcript (`eval/transcript_ai_projects.txt`).
+- **Question set:** `eval/qa_set.json` has 43 answerable questions, each tied to the exact transcript sentence(s) that answer it, and 6 questions the transcript does not answer.
+- **Retrieval metric:** a question is a *hit* when the retrieved chunks cover at least half of one evidence sentence, and *full* when every evidence sentence is covered. Chunk positions come from `start_index`, so the check does not depend on wording.
+- **Answer metric (`--answers`):** answerable questions pass if the reply is not the not-found message and contains the expected keywords; unanswerable ones pass if the reply is the not-found message.
+
+```bash
+python -m eval.run_eval              # retrieval only, no API calls
+python -m eval.run_eval --answers    # also asks Gemini (uses your GOOGLE_API_KEY)
+```
+
+### Results
+
+Measured on a 12,479-character transcript, 43 answerable and 6 unanswerable questions, 16 chunk-size / top-k settings. The app uses chunk 1000, overlap 150, k 6.
+
+| Chunk size | Chunks | k=2 | k=4 | k=6 | k=8 |
+|---|---|---|---|---|---|
+| 300 | 83 | 63% | 72% | 79% | 81% |
+| 500 | 36 | 65% | 72% | 79% | 86% |
+| **1000** | 15 | 65% | 86% | **91%** | 95% |
+| 1500 | 10 | 58% | 77% | 86% | 95% |
+
+Retrieval hit rate (a retrieved chunk covers at least half of an evidence sentence). Picking k chunks at random would score k / chunks, which is 40% for the app setting (chunk 1000, k 6) and 80% for chunk 1500 with k 8, so large-k results on this short transcript say little.
+
+- **Chunk size:** 1000 characters or more beats 300 and 500 at every k from 4 up (77 to 95% against 72 to 86%). Small chunks split the sentences that answer a question.
+- **Current setting:** 91% hit rate against 40% by chance. Going to k 8 adds 2 questions (95%), which is within noise for 43 questions (one question is 2.3 points).
+- **End-to-end answers (Gemini, current setting):** 36 of 43 answerable questions passed the automatic keyword check (84%), and 6 of 6 unanswerable questions were refused with the not-found message.
+- **The 7 automatic failures, read by hand:** 4 are real errors. "What is project number four / five?" were wrongly refused, probably because embedding search matches a bare number like "four" poorly (not yet confirmed). "What is project number two?" got a description of the wrong project, and the "three things to count" question mixed items from two different projects. The other 3 gave acceptable answers that missed a keyword (strict scorer). The strict 36/43 is the reported figure.
+
+**Next step:** add keyword (BM25) search alongside the embeddings and re-run, aiming at the two refused questions.
+
+Limitations: one transcript, so the numbers describe this document and are not a general accuracy claim; keyword matching for answers is a rough check and should be spot-read.
 
 ---
 
