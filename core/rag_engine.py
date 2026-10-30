@@ -2,8 +2,9 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableLambda, RunnablePassthrough
 
+from core.hybrid import HybridRetriever
 from core.llm import get_llm as _get_llm
-from core.vector_store import build_vector_store, get_retriever, load_vector_store
+from core.vector_store import DEFAULT_K, build_vector_store, load_vector_store
 
 NOT_FOUND = "I could not find this information in the meeting transcript."
 
@@ -24,11 +25,14 @@ def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
 
 
-def _chain_from(vector_store):
-    """retrieve -> fill the prompt -> Gemini -> plain text (LangChain LCEL)."""
+def _chain_from(vector_store, retriever=None):
+    """retrieve -> fill the prompt -> Gemini -> plain text (LangChain LCEL).
+    Default retrieval is hybrid (embeddings + BM25 keyword search, rank-fused); pass a runnable
+    such as get_retriever(vector_store) to use embeddings only."""
     prompt = ChatPromptTemplate.from_messages([("system", SYSTEM_PROMPT), ("human", "{question}")])
+    retriever = retriever or RunnableLambda(HybridRetriever(vector_store, k=DEFAULT_K).retrieve)
     return (
-        {"context": get_retriever(vector_store) | RunnableLambda(format_docs), "question": RunnablePassthrough()}
+        {"context": retriever | RunnableLambda(format_docs), "question": RunnablePassthrough()}
         | prompt
         | get_llm()
         | StrOutputParser()

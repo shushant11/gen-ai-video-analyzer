@@ -40,7 +40,7 @@ flowchart TD
     E --> F
     F --> G["Gemini via LangChain<br/>title, summary, action items,<br/>decisions, open questions"]
     F --> H["RAG index<br/>1,000-char chunks, 150 overlap,<br/>all-MiniLM-L6-v2, ChromaDB"]
-    H --> I["Top-6 retrieval"]
+    H --> I["Hybrid retrieval, top 6<br/>embeddings + BM25 keywords, rank-fused"]
     I --> J["Gemini answers<br/>or: not found in transcript"]
 ```
 
@@ -182,31 +182,34 @@ Not covered by the unit tests: transcription, audio conversion and live RAG answ
 - **Answer metric (`--answers`):** answerable questions pass if the reply is not the not-found message and contains the expected keywords; unanswerable ones pass if the reply is the not-found message.
 
 ```bash
-python -m eval.run_eval              # retrieval only, no API calls
-python -m eval.run_eval --answers    # also asks Gemini (uses your GOOGLE_API_KEY)
+python -m eval.run_eval                       # retrieval, embeddings vs hybrid: free, no API calls
+python -m eval.run_eval --answers             # also asks Gemini, embeddings-only retrieval
+python -m eval.run_eval --answers --hybrid    # same, with the hybrid retriever the app now uses
 ```
 
 ### Results
 
-Measured on a 12,479-character transcript, 43 answerable and 6 unanswerable questions, 16 chunk-size / top-k settings. The app uses chunk 1000, overlap 150, k 6.
+Measured on a 12,479-character transcript with 43 answerable and 6 unanswerable questions. Retrieval hit rate, embeddings only → hybrid (embeddings + BM25 keyword search, rank-fused):
 
 | Chunk size | Chunks | k=2 | k=4 | k=6 | k=8 |
 |---|---|---|---|---|---|
-| 300 | 83 | 63% | 72% | 79% | 81% |
-| 500 | 36 | 65% | 72% | 79% | 86% |
-| **1000** | 15 | 65% | 86% | **91%** | 95% |
-| 1500 | 10 | 58% | 77% | 86% | 95% |
+| 300 | 83 | 63 → 70% | 72 → 81% | 79 → 91% | 81 → 93% |
+| 500 | 36 | 65 → 79% | 72 → 91% | 79 → 95% | 86 → 98% |
+| **1000** | 15 | 65 → 88% | 86 → 98% | **91 → 100%** | 95 → 100% |
+| 1500 | 10 | 58 → 84% | 77 → 93% | 86 → 100% | 95 → 100% |
 
-Retrieval hit rate (a retrieved chunk covers at least half of an evidence sentence). Picking k chunks at random would score k / chunks, which is 40% for the app setting (chunk 1000, k 6) and 80% for chunk 1500 with k 8, so large-k results on this short transcript say little.
+Picking k chunks at random would score k / chunks (40% for chunk 1000, k 6; 80% for chunk 1500, k 8), so read large-k rows on this short transcript with care.
 
-- **Chunk size:** 1000 characters or more beats 300 and 500 at every k from 4 up (77 to 95% against 72 to 86%). Small chunks split the sentences that answer a question.
-- **Current setting:** 91% hit rate against 40% by chance. Going to k 8 adds 2 questions (95%), which is within noise for 43 questions (one question is 2.3 points).
-- **End-to-end answers (Gemini, current setting):** 36 of 43 answerable questions passed the automatic keyword check (84%), and 6 of 6 unanswerable questions were refused with the not-found message.
-- **The 7 automatic failures, read by hand:** 4 are real errors. "What is project number four / five?" were wrongly refused, probably because embedding search matches a bare number like "four" poorly (not yet confirmed). "What is project number two?" got a description of the wrong project, and the "three things to count" question mixed items from two different projects. The other 3 gave acceptable answers that missed a keyword (strict scorer). The strict 36/43 is the reported figure.
+| End-to-end (Gemini, chunk 1000, k 6) | Embeddings only | Hybrid (current app) |
+|---|---|---|
+| Answerable questions passing the keyword check | 36 / 43 (84%) | 41 / 43 (95%) |
+| Unanswerable questions correctly refused | 6 / 6 | 6 / 6 |
 
-**Next step:** add keyword (BM25) search alongside the embeddings and re-run, aiming at the two refused questions.
+- **Why hybrid:** embeddings only wrongly refused "What is project number four / five?" and gave two other wrong answers, probably because embedding search matches a bare spoken number poorly. Adding keyword search fixed all four.
+- **Chunk size:** 1000 characters or more beats 300 and 500, because small chunks split the sentences that answer a question.
+- **Remaining 2 automatic failures:** both answers are correct on reading and only miss one of my keywords (a strict scorer).
 
-Limitations: one transcript, so the numbers describe this document and are not a general accuracy claim; keyword matching for answers is a rough check and should be spot-read.
+Limitations: one 12,479-character transcript, so the numbers describe this document and are not a general accuracy claim. The hybrid retriever was designed after seeing the embeddings-only failures on these same 43 questions, so its gain is not measured on unseen questions. Keyword matching for answers is a rough check, and one question is worth 2.3 points.
 
 ---
 

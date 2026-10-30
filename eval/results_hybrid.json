@@ -1,0 +1,590 @@
+{
+  "transcript_chars": 12479,
+  "retrieval": [
+    {
+      "chunk_size": 300,
+      "k": 2,
+      "chunks": 83,
+      "chance": 0.024096385542168676,
+      "dense": {
+        "hit_rate": 0.627906976744186,
+        "full_rate": 0.5813953488372093
+      },
+      "n": 43,
+      "hybrid": {
+        "hit_rate": 0.6976744186046512,
+        "full_rate": 0.6511627906976745
+      }
+    },
+    {
+      "chunk_size": 300,
+      "k": 4,
+      "chunks": 83,
+      "chance": 0.04819277108433735,
+      "dense": {
+        "hit_rate": 0.7209302325581395,
+        "full_rate": 0.6744186046511628
+      },
+      "n": 43,
+      "hybrid": {
+        "hit_rate": 0.813953488372093,
+        "full_rate": 0.7674418604651163
+      }
+    },
+    {
+      "chunk_size": 300,
+      "k": 6,
+      "chunks": 83,
+      "chance": 0.07228915662650602,
+      "dense": {
+        "hit_rate": 0.7906976744186046,
+        "full_rate": 0.7441860465116279
+      },
+      "n": 43,
+      "hybrid": {
+        "hit_rate": 0.9069767441860465,
+        "full_rate": 0.8604651162790697
+      }
+    },
+    {
+      "chunk_size": 300,
+      "k": 8,
+      "chunks": 83,
+      "chance": 0.0963855421686747,
+      "dense": {
+        "hit_rate": 0.813953488372093,
+        "full_rate": 0.7906976744186046
+      },
+      "n": 43,
+      "hybrid": {
+        "hit_rate": 0.9302325581395349,
+        "full_rate": 0.8837209302325582
+      }
+    },
+    {
+      "chunk_size": 500,
+      "k": 2,
+      "chunks": 36,
+      "chance": 0.05555555555555555,
+      "dense": {
+        "hit_rate": 0.6511627906976745,
+        "full_rate": 0.6046511627906976
+      },
+      "n": 43,
+      "hybrid": {
+        "hit_rate": 0.7906976744186046,
+        "full_rate": 0.7674418604651163
+      }
+    },
+    {
+      "chunk_size": 500,
+      "k": 4,
+      "chunks": 36,
+      "chance": 0.1111111111111111,
+      "dense": {
+        "hit_rate": 0.7209302325581395,
+        "full_rate": 0.6976744186046512
+      },
+      "n": 43,
+      "hybrid": {
+        "hit_rate": 0.9069767441860465,
+        "full_rate": 0.8837209302325582
+      }
+    },
+    {
+      "chunk_size": 500,
+      "k": 6,
+      "chunks": 36,
+      "chance": 0.16666666666666666,
+      "dense": {
+        "hit_rate": 0.7906976744186046,
+        "full_rate": 0.7674418604651163
+      },
+      "n": 43,
+      "hybrid": {
+        "hit_rate": 0.9534883720930233,
+        "full_rate": 0.9534883720930233
+      }
+    },
+    {
+      "chunk_size": 500,
+      "k": 8,
+      "chunks": 36,
+      "chance": 0.2222222222222222,
+      "dense": {
+        "hit_rate": 0.8604651162790697,
+        "full_rate": 0.8604651162790697
+      },
+      "n": 43,
+      "hybrid": {
+        "hit_rate": 0.9767441860465116,
+        "full_rate": 0.9767441860465116
+      }
+    },
+    {
+      "chunk_size": 1000,
+      "k": 2,
+      "chunks": 15,
+      "chance": 0.13333333333333333,
+      "dense": {
+        "hit_rate": 0.6511627906976745,
+        "full_rate": 0.627906976744186
+      },
+      "n": 43,
+      "hybrid": {
+        "hit_rate": 0.8837209302325582,
+        "full_rate": 0.8604651162790697
+      }
+    },
+    {
+      "chunk_size": 1000,
+      "k": 4,
+      "chunks": 15,
+      "chance": 0.26666666666666666,
+      "dense": {
+        "hit_rate": 0.8604651162790697,
+        "full_rate": 0.8372093023255814
+      },
+      "n": 43,
+      "hybrid": {
+        "hit_rate": 0.9767441860465116,
+        "full_rate": 0.9767441860465116
+      }
+    },
+    {
+      "chunk_size": 1000,
+      "k": 6,
+      "chunks": 15,
+      "chance": 0.4,
+      "dense": {
+        "hit_rate": 0.9069767441860465,
+        "full_rate": 0.9069767441860465
+      },
+      "n": 43,
+      "hybrid": {
+        "hit_rate": 1.0,
+        "full_rate": 1.0
+      }
+    },
+    {
+      "chunk_size": 1000,
+      "k": 8,
+      "chunks": 15,
+      "chance": 0.5333333333333333,
+      "dense": {
+        "hit_rate": 0.9534883720930233,
+        "full_rate": 0.9534883720930233
+      },
+      "n": 43,
+      "hybrid": {
+        "hit_rate": 1.0,
+        "full_rate": 1.0
+      }
+    },
+    {
+      "chunk_size": 1500,
+      "k": 2,
+      "chunks": 10,
+      "chance": 0.2,
+      "dense": {
+        "hit_rate": 0.5813953488372093,
+        "full_rate": 0.5581395348837209
+      },
+      "n": 43,
+      "hybrid": {
+        "hit_rate": 0.8372093023255814,
+        "full_rate": 0.8372093023255814
+      }
+    },
+    {
+      "chunk_size": 1500,
+      "k": 4,
+      "chunks": 10,
+      "chance": 0.4,
+      "dense": {
+        "hit_rate": 0.7674418604651163,
+        "full_rate": 0.7674418604651163
+      },
+      "n": 43,
+      "hybrid": {
+        "hit_rate": 0.9302325581395349,
+        "full_rate": 0.9302325581395349
+      }
+    },
+    {
+      "chunk_size": 1500,
+      "k": 6,
+      "chunks": 10,
+      "chance": 0.6,
+      "dense": {
+        "hit_rate": 0.8604651162790697,
+        "full_rate": 0.8604651162790697
+      },
+      "n": 43,
+      "hybrid": {
+        "hit_rate": 1.0,
+        "full_rate": 1.0
+      }
+    },
+    {
+      "chunk_size": 1500,
+      "k": 8,
+      "chunks": 10,
+      "chance": 0.8,
+      "dense": {
+        "hit_rate": 0.9534883720930233,
+        "full_rate": 0.9534883720930233
+      },
+      "n": 43,
+      "hybrid": {
+        "hit_rate": 1.0,
+        "full_rate": 1.0
+      }
+    }
+  ],
+  "answers": [
+    {
+      "id": "A01",
+      "answerable": true,
+      "question": "What is the first project the speaker describes?",
+      "answer": "Based on the meeting transcript, the first project the speaker describes is **text to SQL with a clarification engine**. \n\nThis project involves creating a layer where anyone can ask a question in simple English (such as extracting data from a company's database) and the system automatically creates the SQL query to find the answer. It also includes a clarification mechanism to handle ambiguous questions rather than confidently giving a wrong answer.",
+      "pass": true
+    },
+    {
+      "id": "A02",
+      "answerable": true,
+      "question": "What example of an ambiguous question does the speaker give for the SQL project?",
+      "answer": "Based on the meeting transcript, the speaker gives the following example of an ambiguous question for the SQL project: \n\n\"Show me last month's best customer.\"",
+      "pass": true
+    },
+    {
+      "id": "A03",
+      "answerable": true,
+      "question": "What different things could 'best customer' mean?",
+      "answer": "Based on the meeting transcript, \"best customer\" could mean:\n\n1. The one who ordered the most\n2. The one who spent the most money\n3. The one who came back again and again",
+      "pass": true
+    },
+    {
+      "id": "A04",
+      "answerable": true,
+      "question": "What should a real company's text-to-SQL system do when a question is incomplete?",
+      "answer": "Based on the meeting transcript, when a question is incomplete or ambiguous, a real company's system first detects that the question is incomplete, and then asks again for clarification (for example, asking whether the metric should be based on revenue or orders). Only when the user gives an answer does the system form the query.",
+      "pass": true
+    },
+    {
+      "id": "A05",
+      "answerable": true,
+      "question": "What should you measure in the text-to-SQL project?",
+      "answer": "Based on the meeting transcript, in the text-to-SQL project, you need to \"pay attention and record with the clarification engine and without it how many queries the system makes correct.\"",
+      "pass": true
+    },
+    {
+      "id": "A06",
+      "answerable": true,
+      "question": "Which tech stack is suggested for the text-to-SQL project?",
+      "answer": "Based on the meeting transcript, the tech stack suggested for the text-to-SQL project (Project number one) is:\n\n* Python\n* PostgreSQL\n* Pydantic\n* Gemini, OpenAI, or Grok's free tier",
+      "pass": true
+    },
+    {
+      "id": "A07",
+      "answerable": true,
+      "question": "What is project number two?",
+      "answer": "Based on the meeting transcript, project number two is an **offline AI assistant with model benchmark**. \n\nKey details about this project include:\n* **Purpose:** It addresses the need in industries like healthcare, banking, and legal where data cannot leave the company server to go to the internet (such as OpenAI, Gemini, or Anthropic). It involves running models locally.\n* **What to learn:** Getting structured output from Ollama (modeling), enforcing schemas, validating with Pydantic, and retrying if the output is wrong.\n* **Tech stack:** Ollama, open-source models, Python, and Pydantic.\n* **Cost:** Zero.",
+      "pass": true
+    },
+    {
+      "id": "A08",
+      "answerable": true,
+      "question": "Which industries cannot send their data to external AI servers?",
+      "answer": "Based on the meeting transcript, industries like healthcare, banking, and legal cannot send their data to external AI servers.",
+      "pass": true
+    },
+    {
+      "id": "A09",
+      "answerable": true,
+      "question": "Which tool does the speaker suggest installing to run models locally?",
+      "answer": "Based on the meeting transcript, the speaker suggests installing **Ollama** (referred to as \"Olaama\" / \"Ollama\") to run models locally.",
+      "pass": true
+    },
+    {
+      "id": "A10",
+      "answerable": true,
+      "question": "How many models should be compared on your own laptop, and on what?",
+      "answer": "Based on the meeting transcript, you should pick **three different models** and compare them on your own laptop on the same **30-40 questions**.",
+      "pass": false
+    },
+    {
+      "id": "A11",
+      "answerable": true,
+      "question": "How many questions should be used to compare the local models?",
+      "answer": "Based on the meeting transcript, you should use **30-40 questions** to compare the local models.",
+      "pass": true
+    },
+    {
+      "id": "A12",
+      "answerable": true,
+      "question": "What is the real job when working with Ollama?",
+      "answer": "Based on the meeting transcript, the real job when working with Ollama is to get structured output from it. This includes enforcing schema, validating with Pydantic, and retrying if the output is wrong.",
+      "pass": true
+    },
+    {
+      "id": "A13",
+      "answerable": true,
+      "question": "What does the speaker say about validating the model output?",
+      "answer": "Based on the meeting transcript, the speaker mentions validating the output using Pydentik (validating with Pydentik) as part of getting structured output from the model (such as enforcing schema and retrying if the output is wrong), which is a pattern that happens in every production system.",
+      "pass": true
+    },
+    {
+      "id": "A14",
+      "answerable": true,
+      "question": "What is project number three?",
+      "answer": "Based on the meeting transcript, project number three is an **MCP server** (Model Context Protocol server). \n\nKey details about project number three from the transcript:\n* **Description:** It allows AI to go inside systems where login is required (like your GitHub or Notion) to perform tasks that simple public web searches cannot do. For example, creating an MCP server for GitHub allows AI to extract details from your account, check open issues across repos, or create issues and labels.\n* **Stack:** Python, MCP, SDK, and GitHub API.\n* **Cost:** Zero.",
+      "pass": true
+    },
+    {
+      "id": "A15",
+      "answerable": true,
+      "question": "What example does the speaker give for something a plain web search cannot answer?",
+      "answer": "Based on the meeting transcript, the speaker gives the following example: \n\nIf you have 15 repositories in your GitHub account and you want to ask, \"how many issues are still open in my 15 repos?\", a simple public web search cannot answer this because it cannot go inside a system (like GitHub) where login is required.",
+      "pass": true
+    },
+    {
+      "id": "A16",
+      "answerable": true,
+      "question": "What is an MCP server, according to the speaker?",
+      "answer": "According to the speaker, an MCP server is a small connection server that provides tools to AI (such as tools to extract issues or create issues), allowing the AI to decide itself when to use which tool. Creating it yourself shows recruiters that you understand not just the upper layer of AI, but also the lower infrastructure.",
+      "pass": true
+    },
+    {
+      "id": "A17",
+      "answerable": true,
+      "question": "What advice is given about MCP tools that can change or delete something?",
+      "answer": "Based on the meeting transcript, the advice given is to \"always keep them on confirmation.\"",
+      "pass": false
+    },
+    {
+      "id": "A18",
+      "answerable": true,
+      "question": "Which three things should be counted in the MCP project?",
+      "answer": "Based on the meeting transcript, the three things that should be counted in the MCP project are:\n\n1. How many times has AI picked the right tool?\n2. How many times has it picked the wrong tool?\n3. How many times has it failed itself?",
+      "pass": true
+    },
+    {
+      "id": "A19",
+      "answerable": true,
+      "question": "What does picking the wrong tool indicate?",
+      "answer": "Based on the meeting transcript, picking the wrong tool means that your description is not clear.",
+      "pass": true
+    },
+    {
+      "id": "A20",
+      "answerable": true,
+      "question": "What does a failing tool indicate?",
+      "answer": "Based on the meeting transcript, a failing tool indicates that **your error handling is weak**.",
+      "pass": true
+    },
+    {
+      "id": "A21",
+      "answerable": true,
+      "question": "What is project number four?",
+      "answer": "Based on the meeting transcript, project number four is **\"RAG with Eval. Harness\"**. \n\nIn this project, you handle a scenario where a company has 10,000 documents (such as HR policies, client contracts, and 5-year reports), and the AI system searches for 3 or 4 related documents to answer a question. \n\nKey details about project number four:\n* **What you learn / technologies used:** Embeddings, vector database, chunking strategies, and evaluation. The stack includes Python, Chroma or PG vector, and GitHub actions.\n* **Cost:** Zero to ₹500.\n* **How to improve/approach it:** Instead of just creating a basic chatbot, you compare four strategies (Simple chunking, semantic chunking, hybrid search, and re-ranking) by asking 50 questions in every way to see which gives a better answer, and you use GitHub actions to automate it so that if accuracy decreases, the build fails.",
+      "pass": true
+    },
+    {
+      "id": "A22",
+      "answerable": true,
+      "question": "How many documents does the example company have in the RAG project?",
+      "answer": "Based on the meeting transcript, the example company has **10,000 documents** (such as HR policies, client contracts, and 5-year reports) in the RAG project.",
+      "pass": true
+    },
+    {
+      "id": "A23",
+      "answerable": true,
+      "question": "How many documents does the RAG system first retrieve?",
+      "answer": "Based on the meeting transcript, the system first searches for **three or four documents** related to the question from the total 10,000 documents.",
+      "pass": true
+    },
+    {
+      "id": "A24",
+      "answerable": true,
+      "question": "Why is wrong retrieval dangerous in RAG?",
+      "answer": "Based on the meeting transcript, wrong retrieval is dangerous in RAG because if the system picks up the wrong part, the answer will also be wrong. However, the generated answer will seem confident, and looking at it, you won't even know that the wrong data was sent.",
+      "pass": true
+    },
+    {
+      "id": "A25",
+      "answerable": true,
+      "question": "What is the first improvement suggested for the RAG project?",
+      "answer": "Based on the meeting transcript, the first improvement suggested for the RAG project is:\n\n\"Write 50 questions and find and write what their answer is. This is your answer key.\"",
+      "pass": true
+    },
+    {
+      "id": "A26",
+      "answerable": true,
+      "question": "Which four methods should be compared in the RAG project?",
+      "answer": "Based on the meeting transcript, the four methods that should be compared in the RAG project are:\n\n1. Simple chunking\n2. Semantic chunking\n3. Hybrid search\n4. Re-ranking",
+      "pass": true
+    },
+    {
+      "id": "A27",
+      "answerable": true,
+      "question": "What should be automated with GitHub Actions in the RAG project?",
+      "answer": "Based on the meeting transcript, in the RAG with Eval. Harness project, you should automate it using GitHub Actions so that if accuracy decreases, the build will fail.",
+      "pass": true
+    },
+    {
+      "id": "A28",
+      "answerable": true,
+      "question": "What retrieval accuracy improvement does the speaker quote as an example?",
+      "answer": "Based on the meeting transcript, the speaker quotes taking the retrieval accuracy from 61% to 85%.",
+      "pass": true
+    },
+    {
+      "id": "A29",
+      "answerable": true,
+      "question": "Which vector databases are named for the RAG project stack?",
+      "answer": "Based on the meeting transcript, the vector databases named for the RAG project stack are **Chroma** or **PG vector**.",
+      "pass": true
+    },
+    {
+      "id": "A30",
+      "answerable": true,
+      "question": "What is project number five?",
+      "answer": "Based on the meeting transcript, project number five is the **Agentic Code Reviewer**. \n\nAccording to the transcript:\n* It is described as the most advanced project on the list.\n* It involves creating an AI reviewer that reviews code changes (similar to how a senior engineer reviews code in a company before it is merged).\n* It handles failures, retries, and large code chunks that AI cannot read in one go.\n* The stack includes Python, an orchestration library, and a GitHub API.\n* Its cost can be up to ₹1000 because free tier model usage is not enough.",
+      "pass": true
+    },
+    {
+      "id": "A31",
+      "answerable": true,
+      "question": "What should the AI code reviewer's output look like?",
+      "answer": "Based on the meeting transcript, the AI code reviewer's output should provide a structured review showing:\n* Where the security issues are\n* Where the error handling went wrong\n* Where the test is not written\n\nEverything must be provided **with a line number**.",
+      "pass": true
+    },
+    {
+      "id": "A32",
+      "answerable": true,
+      "question": "How can the code reviewer be tested on real bugs?",
+      "answer": "Based on the meeting transcript, the code reviewer can be tested on real bugs by doing the following:\n\n* Pick up the history of a large open-source project to find commits where a bug was introduced and later fixed after a few weeks (meaning you already know what the bug is and where it is).\n* Run your reviewer on that old code and see if it catches the bug. \n* Count two things when testing:\n  1. How many actual bugs were caught.\n  2. How many times it made noise about things that were not wrong (false positives/false alarms).",
+      "pass": true
+    },
+    {
+      "id": "A33",
+      "answerable": true,
+      "question": "Which two things should be counted for the code reviewer?",
+      "answer": "Based on the meeting transcript, the two things that should be counted for the code reviewer (Project 5) are:\n\n1. **How many actual bugs were caught.**\n2. **How many times it made noise about things that were not wrong** (false positives/false alarms).",
+      "pass": true
+    },
+    {
+      "id": "A34",
+      "answerable": true,
+      "question": "How should the code reviewer handle failures and very large code?",
+      "answer": "Based on the meeting transcript, when handling failures and very large code in the AI Code Reviewer project:\n\n* **Failure handling:** If a step fails, you have to retry. \n* **Large code:** If the code is so big that the AI cannot read it in one go, you have to divide it correctly and review it in pieces.",
+      "pass": true
+    },
+    {
+      "id": "A35",
+      "answerable": true,
+      "question": "What is the maximum cost mentioned for the code reviewer project?",
+      "answer": "Based on the meeting transcript, the cost for the Agentic Code Reviewer project \"can be up to ₹1000 because free tier model usage is not enough.\"",
+      "pass": true
+    },
+    {
+      "id": "A36",
+      "answerable": true,
+      "question": "How many projects does the speaker recommend building?",
+      "answer": "Based on the meeting transcript, the speaker recommends building **two to three** projects well, with a deep understanding, numbers, deployment, and documentation. They specifically mention that \"two good projects are much better than five simple projects.\"",
+      "pass": true
+    },
+    {
+      "id": "A37",
+      "answerable": true,
+      "question": "Which projects does the speaker recommend for a beginner?",
+      "answer": "Based on the meeting transcript, the speaker recommends **project one** and **project two** for beginners.",
+      "pass": true
+    },
+    {
+      "id": "A38",
+      "answerable": true,
+      "question": "Which projects help you stand out for placement?",
+      "answer": "Based on the meeting transcript, project four and project five help you stand out for placement.",
+      "pass": true
+    },
+    {
+      "id": "A39",
+      "answerable": true,
+      "question": "Which basic projects does the speaker say get resumes rejected?",
+      "answer": "Based on the meeting transcript, the speaker advises candidates not to put the following basic projects on their resume because recruiters instantly reject them:\n\n* Chat GPT clone\n* PDF chatbot\n* AI assistant",
+      "pass": true
+    },
+    {
+      "id": "A40",
+      "answerable": true,
+      "question": "How does a recruiter tell whether you built the project yourself or followed a tutorial?",
+      "answer": "Based on the meeting transcript, a recruiter can tell whether you built the project yourself or followed a tutorial by looking at the **Git commit history**. \n\nIf there is only one branch, a clean commit, no history, and no issues, it is clearly copied. To prove you built it yourself, you should commit a little bit every day and let your mistakes remain in the commit.",
+      "pass": true
+    },
+    {
+      "id": "A41",
+      "answerable": true,
+      "question": "What four things should every README contain?",
+      "answer": "According to the transcript, every README should contain these four things:\n\n1. What you have created\n2. Its architecture diagram\n3. A result section with actual numbers (measuring what you have created and improved)\n4. A decision file where you have written the reason for technical choices",
+      "pass": true
+    },
+    {
+      "id": "A42",
+      "answerable": true,
+      "question": "What does the speaker say a strong AI project shows?",
+      "answer": "Based on the meeting transcript, the speaker says that a strong AI project shows that you understand evaluation, RAG (Retrieval-Augmented Generation), latency, cost optimization, and production-level AI systems.",
+      "pass": true
+    },
+    {
+      "id": "A43",
+      "answerable": true,
+      "question": "How many years has the speaker worked in the IT industry?",
+      "answer": "Based on the meeting transcript, the speaker has worked in the IT industry for 11 years.",
+      "pass": true
+    },
+    {
+      "id": "U01",
+      "answerable": false,
+      "question": "What is the speaker's favourite colour?",
+      "answer": "I could not find this information in the meeting transcript.",
+      "pass": true
+    },
+    {
+      "id": "U02",
+      "answerable": false,
+      "question": "Which company does the speaker currently work for?",
+      "answer": "I could not find this information in the meeting transcript.",
+      "pass": true
+    },
+    {
+      "id": "U03",
+      "answerable": false,
+      "question": "What is the price of the speaker's paid course?",
+      "answer": "I could not find this information in the meeting transcript.",
+      "pass": true
+    },
+    {
+      "id": "U04",
+      "answerable": false,
+      "question": "How many subscribers does the channel have?",
+      "answer": "I could not find this information in the meeting transcript.",
+      "pass": true
+    },
+    {
+      "id": "U05",
+      "answerable": false,
+      "question": "Which GPU does the speaker recommend for running local models?",
+      "answer": "I could not find this information in the meeting transcript.",
+      "pass": true
+    },
+    {
+      "id": "U06",
+      "answerable": false,
+      "question": "What salary can an AI engineer expect in India?",
+      "answer": "I could not find this information in the meeting transcript.",
+      "pass": true
+    }
+  ]
+}

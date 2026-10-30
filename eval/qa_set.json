@@ -1,0 +1,735 @@
+[
+  {
+    "id": "A01",
+    "question": "What is the first project the speaker describes?",
+    "answerable": true,
+    "evidence": [
+      "project number one, which is text to SQL with a clarification engine"
+    ],
+    "keywords": [
+      [
+        "sql"
+      ],
+      [
+        "clarification"
+      ]
+    ]
+  },
+  {
+    "id": "A02",
+    "question": "What example of an ambiguous question does the speaker give for the SQL project?",
+    "answerable": true,
+    "evidence": [
+      "Like, show me last month's best customer."
+    ],
+    "keywords": [
+      [
+        "best customer"
+      ]
+    ]
+  },
+  {
+    "id": "A03",
+    "question": "What different things could 'best customer' mean?",
+    "answerable": true,
+    "evidence": [
+      "The one who ordered the most, or the one who spent the most money, or the one who came back again and again."
+    ],
+    "keywords": [
+      [
+        "order"
+      ],
+      [
+        "money",
+        "spent",
+        "revenue"
+      ]
+    ]
+  },
+  {
+    "id": "A04",
+    "question": "What should a real company's text-to-SQL system do when a question is incomplete?",
+    "answerable": true,
+    "evidence": [
+      "The system first detects if a question is incomplete.",
+      "Then it asks again, based on revenue or orders."
+    ],
+    "keywords": [
+      [
+        "ask"
+      ]
+    ]
+  },
+  {
+    "id": "A05",
+    "question": "What should you measure in the text-to-SQL project?",
+    "answerable": true,
+    "evidence": [
+      "record with the clarification engine and without it how many queries the system makes correct"
+    ],
+    "keywords": [
+      [
+        "with"
+      ],
+      [
+        "without"
+      ],
+      [
+        "correct"
+      ]
+    ]
+  },
+  {
+    "id": "A06",
+    "question": "Which tech stack is suggested for the text-to-SQL project?",
+    "answerable": true,
+    "evidence": [
+      "Here stack will be used Python, PostgreSQL, Pydentic and Gemini OpenAI or Grok's free tier."
+    ],
+    "keywords": [
+      [
+        "postgres"
+      ],
+      [
+        "pydantic",
+        "pydentic"
+      ]
+    ]
+  },
+  {
+    "id": "A07",
+    "question": "What is project number two?",
+    "answerable": true,
+    "evidence": [
+      "Project number two is offline AI assistant with model benchmark."
+    ],
+    "keywords": [
+      [
+        "offline"
+      ],
+      [
+        "benchmark"
+      ]
+    ]
+  },
+  {
+    "id": "A08",
+    "question": "Which industries cannot send their data to external AI servers?",
+    "answerable": true,
+    "evidence": [
+      "data from industries like healthcare, banking, and legal cannot go out"
+    ],
+    "keywords": [
+      [
+        "healthcare"
+      ],
+      [
+        "banking"
+      ],
+      [
+        "legal"
+      ]
+    ]
+  },
+  {
+    "id": "A09",
+    "question": "Which tool does the speaker suggest installing to run models locally?",
+    "answerable": true,
+    "evidence": [
+      "So install Olaama, pull a model, and make something useful out of it."
+    ],
+    "keywords": [
+      [
+        "ollama",
+        "olaama"
+      ]
+    ]
+  },
+  {
+    "id": "A10",
+    "question": "How many models should be compared on your own laptop, and on what?",
+    "answerable": true,
+    "evidence": [
+      "Pick three different models and compare all three on your own laptop.",
+      "Who takes how much RAM?"
+    ],
+    "keywords": [
+      [
+        "three",
+        "3"
+      ],
+      [
+        "ram"
+      ]
+    ]
+  },
+  {
+    "id": "A11",
+    "question": "How many questions should be used to compare the local models?",
+    "answerable": true,
+    "evidence": [
+      "And on the same 30-40 questions, whose answer is better?"
+    ],
+    "keywords": [
+      [
+        "30"
+      ]
+    ]
+  },
+  {
+    "id": "A12",
+    "question": "What is the real job when working with Ollama?",
+    "answerable": true,
+    "evidence": [
+      "The real job is to get structured output from it."
+    ],
+    "keywords": [
+      [
+        "structured"
+      ]
+    ]
+  },
+  {
+    "id": "A13",
+    "question": "What does the speaker say about validating the model output?",
+    "answerable": true,
+    "evidence": [
+      "Like enforcing schema, validating with Pydentik, and retrying if the output is wrong."
+    ],
+    "keywords": [
+      [
+        "schema"
+      ],
+      [
+        "retry",
+        "retrying"
+      ]
+    ]
+  },
+  {
+    "id": "A14",
+    "question": "What is project number three?",
+    "answerable": true,
+    "evidence": [
+      "Project number three is MCP server."
+    ],
+    "keywords": [
+      [
+        "mcp"
+      ]
+    ]
+  },
+  {
+    "id": "A15",
+    "question": "What example does the speaker give for something a plain web search cannot answer?",
+    "answerable": true,
+    "evidence": [
+      "suppose you have 15 repos in your GitHub account and you want to ask how many issues are still open in my 15 repos."
+    ],
+    "keywords": [
+      [
+        "15"
+      ],
+      [
+        "issues",
+        "repos"
+      ]
+    ]
+  },
+  {
+    "id": "A16",
+    "question": "What is an MCP server, according to the speaker?",
+    "answerable": true,
+    "evidence": [
+      "You create a small server that gives tools to AI."
+    ],
+    "keywords": [
+      [
+        "tools"
+      ]
+    ]
+  },
+  {
+    "id": "A17",
+    "question": "What advice is given about MCP tools that can change or delete something?",
+    "answerable": true,
+    "evidence": [
+      "And remember, start only with read-only.",
+      "Always keep them on confirmation."
+    ],
+    "keywords": [
+      [
+        "read-only",
+        "read only"
+      ],
+      [
+        "confirmation",
+        "confirm"
+      ]
+    ]
+  },
+  {
+    "id": "A18",
+    "question": "Which three things should be counted in the MCP project?",
+    "answerable": true,
+    "evidence": [
+      "How many times has AI picked the right tool?",
+      "How many times has it picked the wrong tool?",
+      "And how many times has it failed itself?"
+    ],
+    "keywords": [
+      [
+        "right tool"
+      ],
+      [
+        "wrong tool"
+      ],
+      [
+        "fail"
+      ]
+    ]
+  },
+  {
+    "id": "A19",
+    "question": "What does picking the wrong tool indicate?",
+    "answerable": true,
+    "evidence": [
+      "If you pick the wrong tool, it means your description is not clear."
+    ],
+    "keywords": [
+      [
+        "description"
+      ]
+    ]
+  },
+  {
+    "id": "A20",
+    "question": "What does a failing tool indicate?",
+    "answerable": true,
+    "evidence": [
+      "And if the tool fails, it means the error handling is weak."
+    ],
+    "keywords": [
+      [
+        "error handling"
+      ]
+    ]
+  },
+  {
+    "id": "A21",
+    "question": "What is project number four?",
+    "answerable": true,
+    "evidence": [
+      "Project number four, RAG with Eval."
+    ],
+    "keywords": [
+      [
+        "rag"
+      ],
+      [
+        "eval"
+      ]
+    ]
+  },
+  {
+    "id": "A22",
+    "question": "How many documents does the example company have in the RAG project?",
+    "answerable": true,
+    "evidence": [
+      "A company has 10,000 documents: HR policies, client contracts, 5-year reports."
+    ],
+    "keywords": [
+      [
+        "10,000",
+        "10000"
+      ]
+    ]
+  },
+  {
+    "id": "A23",
+    "question": "How many documents does the RAG system first retrieve?",
+    "answerable": true,
+    "evidence": [
+      "the system first searches for three or four documents from those 10,000 documents"
+    ],
+    "keywords": [
+      [
+        "three or four",
+        "3 or 4",
+        "three",
+        "four"
+      ]
+    ]
+  },
+  {
+    "id": "A24",
+    "question": "Why is wrong retrieval dangerous in RAG?",
+    "answerable": true,
+    "evidence": [
+      "if the system picks up the wrong part, then the answer will also be wrong",
+      "But they will seem confident"
+    ],
+    "keywords": [
+      [
+        "wrong"
+      ],
+      [
+        "confident"
+      ]
+    ]
+  },
+  {
+    "id": "A25",
+    "question": "What is the first improvement suggested for the RAG project?",
+    "answerable": true,
+    "evidence": [
+      "First, write 50 questions and find and write what their answer is.",
+      "This is your answer key."
+    ],
+    "keywords": [
+      [
+        "50"
+      ],
+      [
+        "answer key"
+      ]
+    ]
+  },
+  {
+    "id": "A26",
+    "question": "Which four methods should be compared in the RAG project?",
+    "answerable": true,
+    "evidence": [
+      "Simple chunking, semantic chunking, hybrid search, and re-ranking."
+    ],
+    "keywords": [
+      [
+        "semantic"
+      ],
+      [
+        "hybrid"
+      ],
+      [
+        "re-rank",
+        "rerank"
+      ]
+    ]
+  },
+  {
+    "id": "A27",
+    "question": "What should be automated with GitHub Actions in the RAG project?",
+    "answerable": true,
+    "evidence": [
+      "If accuracy decreases, the build will fail."
+    ],
+    "keywords": [
+      [
+        "accuracy"
+      ],
+      [
+        "fail"
+      ]
+    ]
+  },
+  {
+    "id": "A28",
+    "question": "What retrieval accuracy improvement does the speaker quote as an example?",
+    "answerable": true,
+    "evidence": [
+      "But I created a rack and took the retrieval accuracy from 61% to 85%.",
+      "Accuracy took it from 61% to 85%."
+    ],
+    "keywords": [
+      [
+        "61"
+      ],
+      [
+        "85"
+      ]
+    ]
+  },
+  {
+    "id": "A29",
+    "question": "Which vector databases are named for the RAG project stack?",
+    "answerable": true,
+    "evidence": [
+      "In this, the stake will be Python, Chroma or PG vector, and GitHub actions."
+    ],
+    "keywords": [
+      [
+        "chroma"
+      ],
+      [
+        "pg"
+      ]
+    ]
+  },
+  {
+    "id": "A30",
+    "question": "What is project number five?",
+    "answerable": true,
+    "evidence": [
+      "project number five is Agentic Code Reviewer"
+    ],
+    "keywords": [
+      [
+        "code reviewer"
+      ]
+    ]
+  },
+  {
+    "id": "A31",
+    "question": "What should the AI code reviewer's output look like?",
+    "answerable": true,
+    "evidence": [
+      "gives a structured review",
+      "Everything with a line number."
+    ],
+    "keywords": [
+      [
+        "line number"
+      ]
+    ]
+  },
+  {
+    "id": "A32",
+    "question": "How can the code reviewer be tested on real bugs?",
+    "answerable": true,
+    "evidence": [
+      "Pick up the history of a large open-source project.",
+      "Run your reviewer on that old code and see if that bug It catches."
+    ],
+    "keywords": [
+      [
+        "history",
+        "old"
+      ],
+      [
+        "bug"
+      ]
+    ]
+  },
+  {
+    "id": "A33",
+    "question": "Which two things should be counted for the code reviewer?",
+    "answerable": true,
+    "evidence": [
+      "First, how many actual bugs were caught, and second, how many times it made noise about things that were not wrong"
+    ],
+    "keywords": [
+      [
+        "bugs"
+      ],
+      [
+        "noise",
+        "not wrong",
+        "false"
+      ]
+    ]
+  },
+  {
+    "id": "A34",
+    "question": "How should the code reviewer handle failures and very large code?",
+    "answerable": true,
+    "evidence": [
+      "When you fail, you have to retry, and if the code is large, you have to divide it correctly and review it in pieces."
+    ],
+    "keywords": [
+      [
+        "retry"
+      ],
+      [
+        "pieces",
+        "divide",
+        "split"
+      ]
+    ]
+  },
+  {
+    "id": "A35",
+    "question": "What is the maximum cost mentioned for the code reviewer project?",
+    "answerable": true,
+    "evidence": [
+      "Its cost can be up to ₹1000"
+    ],
+    "keywords": [
+      [
+        "1000",
+        "1,000"
+      ]
+    ]
+  },
+  {
+    "id": "A36",
+    "question": "How many projects does the speaker recommend building?",
+    "answerable": true,
+    "evidence": [
+      "I would recommend that you make two to three projects well"
+    ],
+    "keywords": [
+      [
+        "two to three",
+        "2-3",
+        "2 to 3"
+      ]
+    ]
+  },
+  {
+    "id": "A37",
+    "question": "Which projects does the speaker recommend for a beginner?",
+    "answerable": true,
+    "evidence": [
+      "If you are a beginner, then make project one and project two."
+    ],
+    "keywords": [
+      [
+        "one"
+      ],
+      [
+        "two"
+      ]
+    ]
+  },
+  {
+    "id": "A38",
+    "question": "Which projects help you stand out for placement?",
+    "answerable": true,
+    "evidence": [
+      "if you want to stand out for placement, then project four and project five"
+    ],
+    "keywords": [
+      [
+        "four"
+      ],
+      [
+        "five"
+      ]
+    ]
+  },
+  {
+    "id": "A39",
+    "question": "Which basic projects does the speaker say get resumes rejected?",
+    "answerable": true,
+    "evidence": [
+      "please don't put basic projects like Chat GPT clone, PDF chatbot, or AI assistant in your resume"
+    ],
+    "keywords": [
+      [
+        "chat gpt",
+        "chatgpt"
+      ],
+      [
+        "pdf chatbot"
+      ]
+    ]
+  },
+  {
+    "id": "A40",
+    "question": "How does a recruiter tell whether you built the project yourself or followed a tutorial?",
+    "answerable": true,
+    "evidence": [
+      "This can be found out from the Git commit history."
+    ],
+    "keywords": [
+      [
+        "commit"
+      ]
+    ]
+  },
+  {
+    "id": "A41",
+    "question": "What four things should every README contain?",
+    "answerable": true,
+    "evidence": [
+      "First, what have you created?",
+      "Second, its architecture diagram.",
+      "Third, a result section with actual numbers.",
+      "And fourth, a decision file"
+    ],
+    "keywords": [
+      [
+        "architecture"
+      ],
+      [
+        "result"
+      ],
+      [
+        "decision"
+      ]
+    ]
+  },
+  {
+    "id": "A42",
+    "question": "What does the speaker say a strong AI project shows?",
+    "answerable": true,
+    "evidence": [
+      "it shows It shows that you understand evaluation, rag, latency, cost optimization, and production-level AI systems"
+    ],
+    "keywords": [
+      [
+        "evaluation"
+      ],
+      [
+        "latency"
+      ],
+      [
+        "cost"
+      ]
+    ]
+  },
+  {
+    "id": "A43",
+    "question": "How many years has the speaker worked in the IT industry?",
+    "answerable": true,
+    "evidence": [
+      "I have been working in the IT industry for 11 years"
+    ],
+    "keywords": [
+      [
+        "11"
+      ]
+    ]
+  },
+  {
+    "id": "U01",
+    "question": "What is the speaker's favourite colour?",
+    "answerable": false,
+    "evidence": [],
+    "keywords": []
+  },
+  {
+    "id": "U02",
+    "question": "Which company does the speaker currently work for?",
+    "answerable": false,
+    "evidence": [],
+    "keywords": []
+  },
+  {
+    "id": "U03",
+    "question": "What is the price of the speaker's paid course?",
+    "answerable": false,
+    "evidence": [],
+    "keywords": []
+  },
+  {
+    "id": "U04",
+    "question": "How many subscribers does the channel have?",
+    "answerable": false,
+    "evidence": [],
+    "keywords": []
+  },
+  {
+    "id": "U05",
+    "question": "Which GPU does the speaker recommend for running local models?",
+    "answerable": false,
+    "evidence": [],
+    "keywords": []
+  },
+  {
+    "id": "U06",
+    "question": "What salary can an AI engineer expect in India?",
+    "answerable": false,
+    "evidence": [],
+    "keywords": []
+  }
+]
