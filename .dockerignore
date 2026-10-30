@@ -1,0 +1,15 @@
+.git
+.github
+.venv
+venv
+__pycache__
+*.pyc
+.env
+vector_db
+downloads
+docs
+tests
+eval
+*.wav
+*.md
+!README.md

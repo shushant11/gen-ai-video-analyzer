@@ -39,9 +39,10 @@ def _chain_from(vector_store, retriever=None):
     )
 
 
-def build_rag_chain(transcript: str):
-    """Index this transcript (replacing any earlier one) and return a question-answering chain."""
-    return _chain_from(build_vector_store(transcript))
+def build_rag_chain(transcript: str, persist: bool = True):
+    """Index this transcript (replacing any earlier one) and return a question-answering chain.
+    persist=False keeps the index in memory only (hosted demo)."""
+    return _chain_from(build_vector_store(transcript, persist=persist))
 
 
 def load_rag_chain():
