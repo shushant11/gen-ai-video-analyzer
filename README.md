@@ -28,24 +28,6 @@ It supports **English** audio (local OpenAI Whisper) and **Hinglish / Hindi** au
 
 ---
 
-## 🖼️ Screenshots
-
-The images at the top show the app analysing a YouTube video. These show the built-in sample meeting (the same view the hosted demo opens with).
-
-**Title, summary and transcript**
-
-<img src="docs/sample-summary.png" alt="Sample meeting: title, summary and transcript" width="100%">
-
-**Action items, key decisions and open questions** (pulled from the transcript with owners and deadlines)
-
-<img src="docs/sample-extraction.png" alt="Sample meeting: action items, decisions and open questions" width="100%">
-
-**Chat with the meeting** (answers come only from the transcript)
-
-<img src="docs/sample-chat.png" alt="Sample meeting: chat answer" width="100%">
-
----
-
 ## 🧠 How it works
 
 ```mermaid
@@ -93,14 +75,13 @@ flowchart TD
 
 ```
 gen-ai-video-analyzer/
-├── app.py                  # Streamlit web interface (local and hosted-demo modes)
+├── app.py                  # Streamlit web interface
 ├── main.py                 # CLI entry point + run_pipeline()
 ├── test.py                 # Manual end-to-end script (needs API keys)
 ├── Requirements.txt        # Runtime dependencies
 ├── requirements-dev.txt    # What the unit tests need
-├── Dockerfile              # Hosted demo image (Hugging Face Spaces)
 ├── core/
-│   ├── llm.py              # Gemini client with retry, per-session API key
+│   ├── llm.py              # Gemini client with retry
 │   ├── transcriber.py      # Whisper + Sarvam AI transcription
 │   ├── summarizer.py       # Title + map-reduce summary
 │   ├── extractor.py        # Action items, decisions, open questions
@@ -108,11 +89,9 @@ gen-ai-video-analyzer/
 │   ├── hybrid.py           # BM25 + embedding hybrid retrieval
 │   └── rag_engine.py       # RAG chain for Q&A
 ├── utils/
-│   ├── audio_processor.py  # YouTube download, WAV conversion, chunking
-│   └── files.py            # Temporary-file cleanup
-├── data/sample_meeting.txt # Original sample transcript for the demo
+│   └── audio_processor.py  # YouTube download, WAV conversion, chunking
 ├── eval/                   # Retrieval and answer evaluation (qa_set.json, run_eval.py)
-├── deploy/                 # Hugging Face Space files
+├── docs/                   # README screenshots
 ├── tests/                  # Unit tests (no API key, audio or model needed)
 └── .github/workflows/ci.yml
 ```
@@ -183,19 +162,6 @@ Edit `source` and `language` in `test.py`, then run `python test.py`.
 
 ---
 
-## ☁️ Hosted demo mode
-
-The same app can run as a public demo. Set `HOSTED_DEMO=1` (the `Dockerfile` does this) and the app changes in four ways: each visitor enters their own Gemini key (kept only in their session), the source is a built-in sample meeting, an uploaded file (up to 10 minutes) or a YouTube URL (cloud servers are often blocked by YouTube), server file paths cannot be typed in, and every visitor gets a private in-memory index instead of the shared `vector_db/` folder. English uses Whisper `base`.
-
-```bash
-docker build -t gen-ai-video-analyzer .
-docker run -p 7860:7860 gen-ai-video-analyzer     # then open http://localhost:7860
-```
-
-`deploy/deploy_hf.bat` publishes the app to a Hugging Face Space (Docker SDK).
-
----
-
 ## ✅ Tests
 
 ```bash
@@ -261,11 +227,10 @@ Limitations: one 12,479-character transcript, so the numbers describe this docum
 
 ## 🗺️ Roadmap
 
-- [ ] Measure retrieval hit rate and answer accuracy on a labelled question set
+- [x] Measure retrieval hit rate and answer accuracy on a labelled question set (see Evaluation)
 - [ ] Report transcription speed and word error rate for Whisper versus Sarvam
 - [ ] Export results to PDF / TXT
 - [ ] Speaker diarization
-- [ ] Docker support and a hosted demo
 - [ ] Clean up temporary audio files
 
 ---

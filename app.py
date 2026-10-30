@@ -1,10 +1,5 @@
-import os
-import shutil
-import tempfile
-import time
-from pathlib import Path
-
 import streamlit as st
+import time
 from dotenv import load_dotenv
 
 load_dotenv()  # load .env before the core modules are imported
@@ -14,15 +9,6 @@ from core.transcriber import transcribe_all
 from core.summarizer import summarize, generate_title
 from core.extractor import extract_action_items, extract_key_decisions, extract_questions
 from core.rag_engine import build_rag_chain, ask_question
-from core.llm import set_api_key
-from utils.files import cleanup_chunks
-
-# Hosted demo mode (set HOSTED_DEMO=1, as the Dockerfile does): visitors bring their own Gemini key,
-# can upload a file or load a built-in sample, cannot type server file paths, audio is capped at
-# 10 minutes, and each visitor gets a private in-memory index. Locally nothing changes.
-HOSTED = os.getenv("HOSTED_DEMO") == "1"
-SAMPLE_MODE, UPLOAD_MODE, URL_MODE = "Sample meeting", "Upload a file", "YouTube URL (may be blocked)"
-SAMPLE_PATH = Path(__file__).parent / "data" / "sample_meeting.txt"
 
 
 # ─── Page Config ────────────────────────────────────────────────────────────────
@@ -352,23 +338,9 @@ with st.sidebar:
     st.markdown("---")
 
     st.markdown('<span class="badge badge-purple">Input</span>', unsafe_allow_html=True)
-    if HOSTED:
-        mode = st.radio("Source", [SAMPLE_MODE, UPLOAD_MODE, URL_MODE], label_visibility="collapsed")
-        gemini_key = st.text_input(
-            "Your Gemini API key", type="password",
-            help="Free key from aistudio.google.com. Used only for your session; never stored.",
-        )
-        set_api_key(gemini_key)  # applies to this visitor's session only
-        uploaded = st.file_uploader("Audio or video file (up to 10 minutes)", type=["mp3", "wav", "m4a", "mp4", "mkv", "webm"]) \
-            if mode == UPLOAD_MODE else None
-        source = st.text_input("YouTube URL", placeholder="https://youtube.com/watch?v=...") if mode == URL_MODE else ""
-        language = "english"
-        st.caption("Demo runs Whisper (base model) on a shared CPU, so a 10-minute file can take several minutes. "
-                   "The sample meeting is instant.")
-    else:
-        mode, uploaded = None, None
-        source = st.text_input("YouTube URL or File Path", placeholder="https://youtube.com/watch?v=... or /path/to/file.mp4")
-        language = st.selectbox("Language", ["english", "hinglish"], index=0)
+    source = st.text_input("YouTube URL or File Path", placeholder="https://youtube.com/watch?v=... or /path/to/file.mp4")
+
+    language = st.selectbox("Language", ["english", "hinglish"], index=0)
 
     run_btn = st.button("⚡  Analyse", use_container_width=True)
 
@@ -391,55 +363,9 @@ st.markdown('<div class="hero-sub">Transcribe · Summarise · Chat with your mee
 st.markdown("---")
 
 # ── Run Pipeline ────────────────────────────────────────────────────────────────
-def audio_to_transcript(update_step) -> str:
-    """Steps 1-2: get the transcript. Hosted mode also handles the sample text and uploaded files."""
-    if HOSTED and mode == SAMPLE_MODE:
-        update_step("audio", "done")
-        update_step("transcript", "done")
-        return SAMPLE_PATH.read_text(encoding="utf-8")
-
-    tmp_dir, chunks = None, []
-    try:
-        update_step("audio", "active")
-        if HOSTED and mode == UPLOAD_MODE:
-            tmp_dir = tempfile.mkdtemp()
-            path = os.path.join(tmp_dir, os.path.basename(uploaded.name))  # basename: ignore any folder in the name
-            with open(path, "wb") as f:
-                f.write(uploaded.getbuffer())
-            chunks = process_input(path)
-        else:
-            chunks = process_input(source)
-        if HOSTED and len(chunks) > 1:  # chunks are 10 minutes each
-            raise ValueError("The hosted demo accepts audio up to 10 minutes. Try the sample meeting or a shorter file.")
-        update_step("audio", "done")
-
-        update_step("transcript", "active")
-        transcript = transcribe_all(chunks, language)
-        update_step("transcript", "done")
-        return transcript
-    finally:
-        if HOSTED:  # keep the shared server's disk clean
-            cleanup_chunks(chunks)
-            if tmp_dir:
-                shutil.rmtree(tmp_dir, ignore_errors=True)
-
-
-def input_error():
-    """Return a message if the sidebar input is incomplete, else None."""
-    if HOSTED:
-        if not (gemini_key or "").strip():
-            return "Enter your Gemini API key in the sidebar (free from aistudio.google.com)."
-        if mode == UPLOAD_MODE and uploaded is None:
-            return "Choose a file to upload."
-        if mode == URL_MODE and not source.strip():
-            return "Enter a YouTube URL."
-        return None
-    return None if source.strip() else "Please enter a YouTube URL or file path."
-
-
 if run_btn:
-    if input_error():
-        st.error(input_error())
+    if not source.strip():
+        st.error("Please enter a YouTube URL or file path.")
     else:
         st.session_state.pipeline_done = False
         st.session_state.result = None
@@ -455,7 +381,13 @@ if run_btn:
             with progress_placeholder.container():
                 st.info("⚙️ Pipeline running — see sidebar for live status…")
 
-            transcript = audio_to_transcript(update_step)
+            update_step("audio", "active")
+            chunks = process_input(source)
+            update_step("audio", "done")
+
+            update_step("transcript", "active")
+            transcript = transcribe_all(chunks, language)
+            update_step("transcript", "done")
 
             update_step("title", "active")
             title = generate_title(transcript)
@@ -472,7 +404,7 @@ if run_btn:
             update_step("extract", "done")
 
             update_step("rag", "active")
-            rag_chain = build_rag_chain(transcript, persist=not HOSTED)
+            rag_chain = build_rag_chain(transcript)
             update_step("rag", "done")
 
             st.session_state.result = {
@@ -605,7 +537,7 @@ else:
             Ready to Analyse
         </div>
         <div style="color:var(--text-muted);font-size:0.85rem;max-width:380px;line-height:1.7">
-            Pick a source in the sidebar and hit <strong>Analyse</strong> to get started.
+            Paste a YouTube URL or local file path in the sidebar, choose your language, and hit <strong>Analyse</strong> to get started.
         </div>
         <div style="margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center">
             <span class="badge badge-purple">Transcription</span>

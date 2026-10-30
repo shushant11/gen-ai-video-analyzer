@@ -1,6 +1,3 @@
-import uuid
-from functools import lru_cache
-
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -18,20 +15,16 @@ CHUNK_OVERLAP = 150
 DEFAULT_K = 6
 
 
-@lru_cache(maxsize=1)
-def get_embeddings():  # loaded once per process (the model is ~90 MB)
+def get_embeddings():
     return HuggingFaceEmbeddings(
         model_name=EMBEDDING_MODEL,
         model_kwargs={"device": "cpu"},
     )
 
 
-def build_vector_store(transcript: str, persist: bool = True) -> Chroma:
+def build_vector_store(transcript: str) -> Chroma:
     """Index ONE transcript. Any previously stored transcript is removed first, so chat
-    answers only ever come from the video that was just analysed.
-
-    persist=False builds a private in-memory index (used by the hosted demo, where several
-    visitors share one server and nothing should be written to disk)."""
+    answers only ever come from the video that was just analysed."""
     print("Building vector store")
 
     splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
@@ -39,13 +32,6 @@ def build_vector_store(transcript: str, persist: bool = True) -> Chroma:
     docs = [Document(page_content=chunk, metadata={"chunk_index": i}) for i, chunk in enumerate(chunks)]
 
     embeddings = get_embeddings()
-
-    if not persist:
-        return Chroma.from_documents(
-            documents=docs,
-            embedding=embeddings,
-            collection_name=f"transcript_{uuid.uuid4().hex}",
-        )
 
     # Drop the old collection (if any). Without this, Chroma appends and a second video's
     # questions can retrieve chunks from the first one.
